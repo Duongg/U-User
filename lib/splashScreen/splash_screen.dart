@@ -1,8 +1,9 @@
 import 'dart:async';
-import 'package:driver_app/authentication/login_screen.dart';
-import 'package:driver_app/global/global.dart';
-import 'package:driver_app/mainScreen/main_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:u_user/assistants/assistant_methods.dart';
+import '../authentication/login_screen.dart';
+import '../global/global.dart';
+import '../mainScreens/main_screen.dart';
 
 class MySplashScreen extends StatefulWidget {
   const MySplashScreen({Key? key}) : super(key: key);
@@ -14,13 +15,14 @@ class MySplashScreen extends StatefulWidget {
 class _MySplashScreenState extends State<MySplashScreen> {
 
   startTimer() {
+   firebaseAuth.currentUser != null ? AssistantMethods.readCurrentOnlineUserInfo() : null;
     Timer(const Duration(seconds: 5), () async {
 
       if(await firebaseAuth.currentUser != null){
         currentFirebaseUser = firebaseAuth.currentUser;
         Navigator.push(context, MaterialPageRoute(builder: (c) => MainScreen()));
       }else{
-        Navigator.push(context, MaterialPageRoute(builder: (c) => LoginScreen()));
+         Navigator.push(context, MaterialPageRoute(builder: (c) => LoginScreen()));
       }
     });
   }
@@ -46,7 +48,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
             const SizedBox(height: 10,),
 
             const Text(
-              "U Driver",
+              "U User",
               style: TextStyle(
                 fontSize: 24,
                 color: Colors.deepPurple,

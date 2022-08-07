@@ -1,11 +1,10 @@
-import 'package:driver_app/authentication/signup_screen.dart';
-import 'package:driver_app/mainScreen/main_screen.dart';
-import 'package:driver_app/splashScreen/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:u_user/authentication/signup_screen.dart';
 import '../global/global.dart';
+import '../splashScreen/splash_screen.dart';
 import '../widgets/progress_dialog.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -28,11 +27,11 @@ class _LoginScreenState extends State<LoginScreen> {
     } else if (passwordTextEditingController.text.isEmpty) {
       Fluttertoast.showToast(msg: "Password is required!");
     }else{
-      loginAsDriver();
+      loginAsUser();
     }
   }
 
-  loginAsDriver() async{
+  loginAsUser() async{
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -53,9 +52,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if(firebaseUser != null){
 
-      currentFirebaseUser = firebaseUser;
-      Fluttertoast.showToast(msg: "Login successful!");
-      Navigator.push(context, MaterialPageRoute(builder: (c) => const MySplashScreen()));
+      DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("users");
+      driverRef.child(firebaseUser.uid).once().then((driverKey)
+      {
+        final snap = driverKey.snapshot;
+        if(snap.value != null){
+          currentFirebaseUser = firebaseUser;
+          Fluttertoast.showToast(msg: "Login successful!");
+          Navigator.push(context, MaterialPageRoute(builder: (c) => const MySplashScreen()));
+        }else{
+          Fluttertoast.showToast(msg: "No records is existed with this email!");
+          firebaseAuth.signOut();
+          Navigator.push(context, MaterialPageRoute(builder: (c) => const MySplashScreen()));
+        }
+      });
+
     }else{
       Navigator.pop(context);
       Fluttertoast.showToast(msg: "Error occurred during login");
@@ -78,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 20,),
                 const Text(
-                  "Login as a Driver",
+                  "Welcome to U User",
                   style: TextStyle(
                     fontSize: 26,
                     color: Colors.black45,
