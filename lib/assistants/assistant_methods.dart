@@ -19,10 +19,12 @@ class AssistantMethods{
     var requestResponse = await RequestAssistant.receiveRequest(urlAPI);
     if (requestResponse != "Error Occurred, Failed. No response.") {
       humanAddress = requestResponse["results"][0]["formatted_address"];
-
+     //  humanAddress = "Trường Sơn, Phường 2, Tân Bình, Thành phố Hồ Chí Minh";
       Directions userPickUpAddress = Directions();
       userPickUpAddress.locationLatitude = position.latitude;
       userPickUpAddress.locationLongitude = position.longitude;
+      // userPickUpAddress.locationLatitude = 10.8184684;
+      // userPickUpAddress.locationLongitude = 106.6566358;
       userPickUpAddress.locationName = humanAddress;
 
       Provider.of<AppInfo>(context, listen: false).updatePickUpLocationAddress(userPickUpAddress);

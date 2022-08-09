@@ -33,17 +33,17 @@ class PlacePredictionTileDesign extends StatelessWidget {
     }
     if(responseApi["status"] == "OK"){
       Directions directions = Directions();
-      directions.locationName = responseApi["result"]["name"];
+       directions.locationName = responseApi["result"]["name"];
+     // directions.locationName = "FPT Software F-town, 3 Đ. Võ Chí Công, Long Thạnh Mỹ, Thành Phố Thủ Đức, Thành phố Hồ Chí Minh";
       directions.locationId = placesId;
-      directions.locationLatitude = responseApi["result"]["geometry"]["location"]["lat"];
-      directions.locationLongitude = responseApi["result"]["geometry"]["location"]["lng"];
-
+       directions.locationLatitude = responseApi["result"]["geometry"]["location"]["lat"];
+       directions.locationLongitude = responseApi["result"]["geometry"]["location"]["lng"];
+      // directions.locationLatitude = 10.8357264;
+      // directions.locationLongitude = 106.8052532;
       Provider.of<AppInfo>(context, listen: false).updateDropOffLocationAddress(directions);
 
       Navigator.pop(context, "obtainedDropoff");
-
-
-    }
+   }
 
 
   }
